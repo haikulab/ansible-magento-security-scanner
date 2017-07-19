@@ -1,0 +1,31 @@
+---
+
+# Required packages
+magesec__required_packages:
+  - python-pip
+  - gcc
+  - python-dev
+  - logrotate
+
+# Scanner packages top install
+magesec__scanner_packages:
+  - mwscan
+
+# Target folder to scan - you might want to update this one
+magesec__target: /var/www
+
+## Log file location
+magesec__logfile_path: /var/log/magento-security-scan.log
+## Rule set to be used for the scanning
+magesec__ruleset: magesec
+## Allow scanner to follow symlinks
+magesec__followsymlinks: "" # set to "--followsymlinks"
+## Allow scanner to scan all files, not just code
+magesec__deep: "" # change to "--deep"
+
+# Action performed by the cron job
+## This here so it can be easily overwritten
+magesec__action: "mwscan --ruleset {{ magesec__ruleset }} {{ magesec__followsymlinks }} {{ magesec__deep }} {{ magesec__target }} >> {{ magesec__logfile_path }} {{ magesec__extras }}"
+
+## use this variable to add post task actions
+magesec__extras: "&& echo 'done'"

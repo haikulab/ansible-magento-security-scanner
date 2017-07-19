@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: Sergei Filippov
+  company: Haiku Lab Limited
+  description: Configures Magento Security Scanner and log rotation
+  license: MIT
+  min_ansible_version: 1.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+    - name: Debian
+      versions:
+        - Wheezy
+        - Jessie
+        - Stretch
+  galaxy_tags:
+    - system
+    - monitoring
+    - application
+dependencies: []

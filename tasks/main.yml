@@ -1,0 +1,27 @@
+---
+
+- name: Install required system packages
+  apt: name="{{ item }}" state=present
+  with_items: "{{ magesec__required_packages }}"
+  register: magesec_deps_ready
+
+- name: Install required python packages
+  when: magesec_deps_ready | success
+  pip: name="{{ item }}"
+  with_items: "{{ magesec__scanner_packages }}"
+  register: magesec_ready
+
+- name: Setup automatic log rotation
+  when: magesec_ready | success
+  template: src=log-rotate.conf.j2 dest=/etc/logrotate.d/magento-security-scanner
+
+- name: Setting /etc/cron.d config for the scan
+  cron: |
+    name="Magento Security Scanner task"
+    job="{{ magesec__action }}"
+    cron_file="magento-security-scanner"
+    user=root
+    state=present
+    minute="*" hour="*/6"
+
+#- debug: msg="{{ auto_update }}"
