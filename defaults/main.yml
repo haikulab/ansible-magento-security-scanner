@@ -11,6 +11,9 @@ magesec__required_packages:
 magesec__scanner_packages:
   - mwscan
 
+## Path to mwscan
+magesec__mwscan_path: "/usr/local/bin/mwscan"
+
 ## File name for the cron file in /etc/cron.d/{{ magesec__cron_file }}
 magesec__cron_file: "magento-security-scanner"
 
@@ -34,7 +37,7 @@ magesec__deep: "" # change to "--deep"
 
 # Action performed by the cron job ###########################################################
 ## This here so it can be easily overwritten
-magesec__action: "mwscan --ruleset {{ magesec__ruleset }} {{ magesec__followsymlinks }} {{ magesec__deep }} {{ magesec__target }} {{ magesec__extras }}"
+magesec__action: "{{ magesec__mwscan_path }} --ruleset {{ magesec__ruleset }} {{ magesec__followsymlinks }} {{ magesec__deep }} {{ magesec__target }} {{ magesec__extras }}"
 
 ## use this variable to add post task actions
 magesec__extras: "&& echo 'done'"
