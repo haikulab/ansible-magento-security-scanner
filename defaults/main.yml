@@ -11,11 +11,17 @@ magesec__required_packages:
 magesec__scanner_packages:
   - mwscan
 
+## Default email address for notifications
+magesec__email: "root@localhost"
+
+# Cron env variables #########################################################################
+## eg. Email address to which errors should be sent
+magesec__cron_variables_to_add:
+  - name: "MAILTO"
+    value: "{{ magesec__email }}"
+
 ## Path to mwscan
 magesec__mwscan_path: "/usr/local/bin/mwscan"
-
-## File name for the cron file in /etc/cron.d/{{ magesec__cron_file }}
-magesec__cron_file: "magento-security-scanner"
 
 ## Target folder to scan - you might want to update this one
 magesec__target: /var/www
@@ -23,29 +29,42 @@ magesec__target: /var/www
 ## Default user for Magento Security Scanner
 magesec__user: root
 
-## Default email address for notifications
-magesec__email: "root@localhost"
-
 ## Rule set to be used for the scanning
-magesec__ruleset: magesec
+magesec__ruleset: "magesec" # byte,file,magehost,magemojo,magesec,nbs
 
 ## Allow scanner to follow symlinks
-magesec__followsymlinks: "" # set to "--followsymlinks"
+magesec__followsymlinks: "yes" # yes/no
 
 ## Allow scanner to scan all files, not just code
-magesec__deep: "" # change to "--deep"
+magesec__deep_scan: "no" # yes/no --deep
 
-# Action performed by the cron job ###########################################################
+magesec__quet_mode: "no" # yes/no --quiet
+magesec__newonly: "no" # yes/no --newonly
+
 ## This here so it can be easily overwritten
-magesec__action: "{{ magesec__mwscan_path }} --ruleset {{ magesec__ruleset }} {{ magesec__followsymlinks }} {{ magesec__deep }} {{ magesec__target }} {{ magesec__extras }}"
+magesec__post_scan_task_enabled: "yes" # yes/no
+magesec__post_scan_task: "echo 'done'"
 
-## use this variable to add post task actions
-magesec__extras: "&& echo 'done'"
+# Cron execution timing configuration
+## Minutes [0-59]
+## |   Hours [0-23]
+## |   |   Days [1-31]
+## |   |   |    Months [1-12]
+## |   |   |    |   Days of the Week [Numeric, 0-6]
+## |   |   |    |   |
+## *   *   *   *   * home/path/to/command/the_command.sh
 
-# Cron env variables #########################################################################
-## eg. Email address to which errors should be sent
-magesec__cron_variables_to_add:
-  - var_name: "MAILTO"
-    var_value: "{{ magesec__email }}"
-    user: "{{ magesec__user }}"
-    state: present
+## Note: Default 2am every day.
+magesec_cron_time_minutes: "*"
+magesec_cron_time_hours: "2"
+magesec_cron_time_days: "*"
+magesec_cron_time_months: "*"
+magesec_cron_time_dow: "*"
+
+## Note: Default 2am every day.
+magesec__cron_files_to_create:
+  - src: "magesec-cron-template.j2"
+    dest: "/etc/cron.d/magento-security-scanner"
+    owner: "root"
+    group: "root"
+    mode: "0700"

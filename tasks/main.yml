@@ -11,22 +11,14 @@
   with_items: "{{ magesec__scanner_packages }}"
   register: magesec_ready
 
-- name: Add key variables to cron configuration
-  cronvar: >
-     user="{{ item.user }}"
-     name="{{ item.var_name }}"
-     value="{{ item.var_value }}"
-     state={{ item.state | default("present") }}
-     cron_file="{{ magesec__cron_file }}"
-  with_items: "{{ magesec__cron_variables_to_add }}"
-
 - name: Setting /etc/cron.d config for the scan
-  cron: |
-    name="Magento Security Scanner task"
-    job="{{ magesec__action }}"
-    cron_file="{{ magesec__cron_file }}"
-    user="{{ magesec__user }}"
-    state=present
-    minute="*" hour="*/6"
+  when: (magesec_ready | success)
+  template: >
+    src="{{ item.src }}"
+    dest="{{ item.dest }}"
+    owner="{{ item.owner }}"
+    group="{{ item.group }}"
+    mode="{{ item.mode | default('0700') }}"
+  with_items: "{{ magesec__cron_files_to_create }}"
 
 #- debug: msg="{{ auto_update }}"

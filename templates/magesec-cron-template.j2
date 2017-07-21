@@ -1,0 +1,7 @@
+# Ansible Managed
+
+{% for env in magesec__cron_variables_to_add -%}
+{{ env.name}}={{ env.value }}
+{%- endfor %}
+
+{{ magesec_cron_time_minutes }} {{ magesec_cron_time_hours }} {{ magesec_cron_time_days }} {{ magesec_cron_time_months }} {{ magesec_cron_time_dow }} {{ magesec__user }} {{ magesec__mwscan_path }} --ruleset {{ magesec__ruleset }}{% if magesec__followsymlinks is sameas true %} --followsymlinks{% endif %}{% if magesec__deep_scan is sameas true %} --deep{% endif %}{% if magesec__quiet_mode is sameas true %} --quiet{% endif %}{% if magesec__newonly is sameas true %} --newonly{% endif %} {{ magesec__target }}{% if magesec__post_scan_task_enabled is sameas true %} && {{ magesec__post_scan_task }}{% endif %}
