@@ -17,4 +17,7 @@ galaxy_info:
     - system
     - monitoring
     - application
+    - magento
+    - magento2
+    - security
 dependencies: []
