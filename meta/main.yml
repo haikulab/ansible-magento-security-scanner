@@ -12,9 +12,7 @@ galaxy_info:
         - xenial
     - name: Debian
       versions:
-        - Wheezy
-        - Jessie
-        - Stretch
+        - jessie
   galaxy_tags:
     - system
     - monitoring
