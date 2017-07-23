@@ -55,7 +55,7 @@ magesec__post_scan_task: "echo 'done'"
 ## *   *   *   *   * home/path/to/command/the_command.sh
 
 ## Note: Default 2am every day.
-magesec_cron_time_minutes: "*"
+magesec_cron_time_minutes: "0"
 magesec_cron_time_hours: "2"
 magesec_cron_time_days: "*"
 magesec_cron_time_months: "*"
